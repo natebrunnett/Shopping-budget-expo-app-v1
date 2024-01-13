@@ -40,6 +40,30 @@ export default function Router() {
         {props => <Home {...props} 
         />}
         </Stack.Screen>
+        <Stack.Screen
+          name="Budget"
+          options={{
+            headerTitleStyle: {color: "orange"},
+            headerStyle: { 
+                backgroundColor: "#2a2a2a",
+                },
+            tabBarStyle: { 
+                backgroundColor: "#2a2a2a", 
+                borderTopColor: "black",
+                borderTopWidth: .7},
+            tabBarLabelStyle: {color: "orange"},
+            tabBarLabel: 'Budget',
+            tabBarIcon: ({ focused, color, size }) =>
+              focused ? (
+                <MaterialCommunityIcons name="weather-sunny" size={25} color="orange" />
+              ) : (
+                <MaterialCommunityIcons name="weather-sunny" size={20} />
+              )
+          }}
+        >
+        {props => <Budget {...props} 
+        />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
