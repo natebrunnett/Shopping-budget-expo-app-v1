@@ -83,19 +83,26 @@ const Home= ({goals, setGoals}) => {
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.transparentView}>
+          
           <View style={styles.modalView}>
+            
             <Text style={styles.modalText}>Goal</Text>
+            
             <TextInput style={styles.goalInput}/>
+            
             <View style={{display: 'flex', flexDirection: 'row', alignItems: "center", gap: 5}}>
               <Text style={{fontWeight: 'bold', fontSize: 14, paddingBottom: 10}}>Price</Text>
               <TextInput style={styles.priceInput}></TextInput>
             </View>
+            
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
               <Text style={styles.textStyle}>Let's do it!</Text>
-            </Pressable>
-          </View>
+             </Pressable>
+         
+           </View>
+        
         </View>
       </Modal>
 
