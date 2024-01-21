@@ -6,6 +6,9 @@ import Budget from '../views/Budget';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import uuid from 'react-native-uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Router() {
 
@@ -21,35 +24,40 @@ export default function Router() {
   can just be incremented by one, it doesn't need to be uuid.
   
   */
-  const [goals, setGoals] = useState(Array(20)
-    .fill('')
-    .map((_, i) => ({ 
-      key: `${i}`, 
-      body: "1/3 kg of chicken",
-      price: 5,
-      category: "grocery"
-     })));
-  const [categories, setCategories] = useState([6,7,8,9,10]);
+  // const [goals, setGoals] = useState(Array(5)
+  //   .fill('')
+  //   .map((_, i) => ({ 
+  //     key: uuid.v4(), 
+  //     body: "1/3 kg of chicken",
+  //     price: 5,
+  //     category: "grocery"
+  //    })));
 
-  /*goal[0]= {
-    body: "1/3 Kg of chicken"
-    price: 5 (euros),
-    category: "grocery"
-  } 
-  
-  categories[0]={
-    category: "grocery"
-    notes: "best place to go is El Jamon up the street
-      prices are cheap, and they have most items"
-    weeklyGoal: "50 (euros)",
-    monthlyGoal: "200 (euros)"
-  }
-  
-  */
+  const [goals, setGoals] = useState([])
+
+  const [data, setData]=useState([1,2,3,4,5])
+
+  const [categories, setCategories] = useState(['Groceries']);
+
+  const _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('goals');
+      let bringBackToArray= JSON.parse(value)
+      setGoals(bringBackToArray);
+      console.log(bringBackToArray)
+  // now we have data restored from asyncStorage parsed back into an array which we can use
+  } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+
 
   useEffect(() => {
-    //_retrieveData from AsyncStorage
+    _retrieveData();
+    //setGoals(newGoals);
     console.log("Router useEffect")
+
   }, [])
 
   return (

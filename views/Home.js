@@ -3,15 +3,50 @@ import { Modal, Pressable, StyleSheet, View, Text, Button,
 TextInput, Alert, TouchableOpacity,TouchableHighlight } from 'react-native'
 import { useEffect, useState } from 'react';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { Picker } from '@react-native-picker/picker';
+import uuid from 'react-native-uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 //import { LinearGradient } from 'expo-linear-gradient';
 
-const Home= ({goals, setGoals}) => {
+const Home= ({goals, setGoals }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [goalInput, setGoalInput] = useState('');
+  const [priceInput, setPriceInput] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Groceries');
+
   useEffect(() => {
     console.log("Home useEffect")
-  }, [])
+    _storeData()
+  }, [goals])
+
+  const _storeData = async () => {
+    try {
+      // we need to stringify our array into a string
+      if(goals.length !== 0 ){
+        console.log("storing = " + goals)
+        await AsyncStorage.setItem('goals', JSON.stringify(goals) );
+      }
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
+  const createGoal = () => {
+    console.log('Lets do it pressed!')
+
+    let newGoal = {
+      key: uuid.v4(), 
+      body: goalInput,
+      price: priceInput,
+      category: selectedCategory
+    }
+    let newList = [...goals];
+    newList.push(newGoal);
+    setGoals(newList);
+  }
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -61,7 +96,7 @@ const Home= ({goals, setGoals}) => {
           <Text style={{color: "orange"}}>{data.item.body} </Text>
         
           <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
-            <Text style={{color: 'white'}}>{data.item.key}</Text>
+            {/* <Text style={{color: 'white'}}>{data.item.key}</Text> */}
             <Text style={{color: "orange", fontWeight: "bold"}}>{data.item.price} € </Text>
             <Text style={{color: "orange", fontStyle: "italic"}}>{data.item.category}</Text>
           </View>
@@ -86,18 +121,46 @@ const Home= ({goals, setGoals}) => {
           
           <View style={styles.modalView}>
             
+            <View style={styles.exitButtonRow}>
+              <Pressable 
+                style={styles.exitButton}
+                onPress={() => {setModalVisible(!modalVisible)}}
+                ><Text>x</Text></Pressable>
+            </View>
+
             <Text style={styles.modalText}>Goal</Text>
             
-            <TextInput style={styles.goalInput}/>
+
+            <TextInput 
+            value={goalInput}
+            onChangeText={(text) => setGoalInput(text)} 
+            style={styles.goalInput}/>
             
             <View style={{display: 'flex', flexDirection: 'row', alignItems: "center", gap: 5}}>
+              
               <Text style={{fontWeight: 'bold', fontSize: 14, paddingBottom: 10}}>Price</Text>
-              <TextInput style={styles.priceInput}></TextInput>
+              <TextInput 
+              style={styles.priceInput}
+              value={priceInput}
+              onChangeText={(text) => setPriceInput(text)} 
+              />
+
             </View>
             
+            <View style={styles.picker}>
+                <Text style={{fontSize: 14, fontWeight:'bold'}}>Category </Text>
+                <Picker
+                  itemStyle={styles.itemStyle}
+                  selectedValue={selectedCategory}
+                  onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
+                  {/* category.map return picker item */}
+                  <Picker.Item label="Groceries" value="Groceries" />
+                </Picker>
+              </View>
+
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={() => {setModalVisible(!modalVisible), createGoal()}}>
               <Text style={styles.textStyle}>Let's do it!</Text>
              </Pressable>
          
@@ -203,12 +266,23 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 5,
     textAlign: 'center',
     color: "black",
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+  },
+  exitButtonRow: {
+    backgroundColor: "red",
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end"
+  },
+  exitButton: {
+    padding: 5,
+    backgroundColor: "orange"
   },
 
   goalInput: {
@@ -272,6 +346,29 @@ const styles = StyleSheet.create({
   },
 
   // SwipeListView end
+
+
+  //picker start
+  picker: {
+    paddingTop: "0%",
+    marginTop: "0%",
+    paddingBottom: 0,
+    marginBottom: "3%",
+    marginLeft: "4%",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  itemStyle: {
+    color:'black',
+    width:130, 
+    height:40,
+    fontSize: 14,
+  },
+
+  //picker end
 
 });
 
