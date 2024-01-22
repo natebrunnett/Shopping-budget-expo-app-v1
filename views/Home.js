@@ -25,8 +25,8 @@ const Home= ({goals, setGoals }) => {
   const _storeData = async () => {
     try {
       // we need to stringify our array into a string
-      if(goals.length !== 0 ){
-        console.log("storing = " + goals)
+      if(goals.length !== 0 && goals !== null){
+        console.log("storing goals = " + goals)
         await AsyncStorage.setItem('goals', JSON.stringify(goals) );
       }
     } catch (error) {
@@ -44,6 +44,7 @@ const Home= ({goals, setGoals }) => {
       category: selectedCategory
     }
     let newList = [...goals];
+    console.log("goals... newList= " + newList)
     newList.push(newGoal);
     setGoals(newList);
   }

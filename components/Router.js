@@ -39,12 +39,26 @@ export default function Router() {
 
   const [categories, setCategories] = useState(['Groceries']);
 
-  const _retrieveData = async () => {
+  const _retrieveDataGoals = async () => {
     try {
       const value = await AsyncStorage.getItem('goals');
       let bringBackToArray= JSON.parse(value)
       setGoals(bringBackToArray);
-      console.log(bringBackToArray)
+      console.log("retrieved Goals= " + bringBackToArray)
+  // now we have data restored from asyncStorage parsed back into an array which we can use
+  } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  const _retrieveDataCategories = async () => {
+    try {
+      const value = await AsyncStorage.getItem('categories');
+      let bringBackToArray= JSON.parse(value)
+      if(bringBackToArray === null){
+        setCategories([]);
+      }else setCategories(bringBackToArray);
+      console.log("retrieved categories= " + bringBackToArray)
   // now we have data restored from asyncStorage parsed back into an array which we can use
   } catch (error) {
       // Error retrieving data
@@ -54,8 +68,8 @@ export default function Router() {
 
 
   useEffect(() => {
-    _retrieveData();
-    //setGoals(newGoals);
+    _retrieveDataGoals();
+    _retrieveDataCategories();
     console.log("Router useEffect")
 
   }, [])
@@ -114,6 +128,7 @@ export default function Router() {
         >
         {props => <Budget {...props} 
         categories={categories}
+        setCategories={setCategories}
         />}
         </Stack.Screen>
       </Stack.Navigator>
