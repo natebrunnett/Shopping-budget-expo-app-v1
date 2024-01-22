@@ -33,17 +33,17 @@ export default function Router() {
   //     category: "grocery"
   //    })));
 
-  const [goals, setGoals] = useState([])
+  const [goals, setGoals] = useState(null)
 
-  const [data, setData]=useState([1,2,3,4,5])
-
-  const [categories, setCategories] = useState(['Groceries']);
+  const [categories, setCategories] = useState(null);
 
   const _retrieveDataGoals = async () => {
     try {
       const value = await AsyncStorage.getItem('goals');
       let bringBackToArray= JSON.parse(value)
-      setGoals(bringBackToArray);
+      if(bringBackToArray === null){
+        setGoals([])
+      }else setGoals(bringBackToArray);
       console.log("retrieved Goals= " + bringBackToArray)
   // now we have data restored from asyncStorage parsed back into an array which we can use
   } catch (error) {
