@@ -66,7 +66,7 @@ const Budget = ({categories, setCategories}) => {
       list.map((data, idx) => {
         return (
           <View key={idx}>
-          <Text>{data.body} {data.price} {data.date}</Text>
+          <Text>{data.item.body} {data.item.price} {data.item.date}</Text>
           </View>
         )
       })
