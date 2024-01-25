@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal } from 'react-native'
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 /* We are storing
 {
@@ -14,6 +15,8 @@ const Budget = ({categories, setCategories}) => {
 
   const [catInput, setCatInput] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [weeklyInput, setWeeklyInput] = useState('');
+  const [monthlyInput, setMonthlyInput] = useState('');
 
     useEffect(() => {
         console.log("Budget.js useEffect")
@@ -23,7 +26,14 @@ const Budget = ({categories, setCategories}) => {
     const addCategory = () => {
 
       const newList = [...categories];
-      newList.push(catInput);
+      const newObject= {
+        key: uuid.v4(), 
+        category: catInput,
+        weeklyBudget: weeklyInput,
+        monthlyBudget: monthlyInput,
+        list: []
+      }
+      newList.push(newObject)
       setCategories(newList);
       setCatInput('');
       console.log(categories);
@@ -43,6 +53,24 @@ const Budget = ({categories, setCategories}) => {
         // Error saving data
       }
     };
+
+    const deleteCategory = (uuid) => {
+      const newList= [...categories];
+      const prevIndex = categories.findIndex(item => item.key === uuid);
+      newList.splice(prevIndex, 1);
+      setCategories(newList);
+    }
+
+
+    const renderCategoriesList = (list) => (
+      list.map((data, idx) => {
+        return (
+          <View key={idx}>
+          <Text>{data.body} {data.price} {data.date}</Text>
+          </View>
+        )
+      })
+    )
   
 
     const renderCategories = () => (
@@ -51,7 +79,23 @@ const Budget = ({categories, setCategories}) => {
          
           return(
           <View style={styles.catContainer} key={idx}>
-            <Text style={styles.catContainerText}>{data}</Text>
+            <View style={styles.deleteButtonRow}>
+              <Pressable
+                style={styles.deleteButton}
+                onPress={() => deleteCategory(data.key)}>
+                  <Text>Delete</Text>
+              </Pressable>
+            </View>
+            <Text style={styles.catTitle}>Category</Text>
+            <Text style={styles.catContainerText}>{data.category}</Text>
+            <Text style={styles.catTitle}>Weekly budget</Text>
+            <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
+            <Text style={styles.catTitle}>Monthly budget</Text>
+            <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
+            <ScrollView>
+              {data.list && renderCategoriesList(data.list)}
+            </ScrollView>
+            {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
           </View>
           )
       
@@ -64,11 +108,7 @@ const Budget = ({categories, setCategories}) => {
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Text style={{color: "orange"}}>Add</Text>
-              <TextInput 
-                style={styles.input}
-                value={catInput}
-                onChangeText={(text) => setCatInput(text)}></TextInput>
+              <Text style={{color: "orange"}}>Add Category</Text>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(true)}>
@@ -85,17 +125,46 @@ const Budget = ({categories, setCategories}) => {
                   setModalVisible(!modalVisible);
                 }}>
                 <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Hello World!</Text>
-                    <Pressable
-                      style={[styles.button, styles.buttonClose]}
-                      onPress={() => setModalVisible(!modalVisible)}>
-                      <Text style={styles.textStyle}>Hide Modal</Text>
-                    </Pressable>
-                  </View>
+                  <ScrollView>
+                    <View style={styles.modalView}>
+                      <View style={styles.exitButtonRow}>
+                        <Pressable
+                          style={styles.exitButton}
+                          onPress={() => setModalVisible(!modalVisible)}>
+                          <Text style={styles.textStyle}>X</Text>
+                        </Pressable>
+                      </View>
+                      <Text style={styles.modalText}>Category</Text>
+                      <TextInput 
+                        value={catInput} 
+                        style={styles.input}
+                        onChangeText={(text) => setCatInput(text)}
+                        ></TextInput>
+                      <Text style={styles.modalText}>WeeklyBudget</Text>
+                      <TextInput 
+                        value={weeklyInput} 
+                        style={styles.input}
+                        onChangeText={(text) => setWeeklyInput(text)}
+                        ></TextInput>
+                      <Text style={styles.modalText}>MonthlyBudget</Text>
+                      <TextInput 
+                        value={monthlyInput} 
+                        style={styles.input}
+                        onChangeText={(text) => setMonthlyInput(text)}
+                        ></TextInput>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {setModalVisible(!modalVisible), addCategory()}}>
+                        <Text style={styles.textStyle}>Hide Modal</Text>
+                      </Pressable>
+                    </View>
+                  </ScrollView>
                 </View>
               </Modal>
+            <ScrollView>
             {renderCategories()}
+            </ScrollView>
+            
         </View>
     );
 }
@@ -117,7 +186,7 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       justifyContent: 'center',
       margin: "5%",
-      color: 'white',
+      color: 'black',
     },
     textStyle: {
       color: 'white',
@@ -125,11 +194,24 @@ const styles = StyleSheet.create({
       textAlign: 'center',
     },
     catContainer: {
-      backgroundColor: 'green',
       width: "100%",
     },
     catContainerText: {
       color: 'white'
+    },
+    catTitle: {
+      color: 'orange'
+    },
+    deleteButtonRow: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+    },
+    deleteButton: {
+      backgroundColor: 'red',
+      padding: 5,
+      borderRadius: 10
     },
     centeredView: {
       flex: 1,
@@ -138,10 +220,11 @@ const styles = StyleSheet.create({
       marginTop: 22,
     },
     modalView: {
-      margin: 20,
+      marginTop: 70,
       backgroundColor: 'white',
       borderRadius: 20,
-      padding: 35,
+      padding: 25,
+      paddingTop: 0,
       alignItems: 'center',
       shadowColor: '#000',
       shadowOffset: {
@@ -166,6 +249,21 @@ const styles = StyleSheet.create({
     modalText: {
       marginBottom: 15,
       textAlign: 'center',
+    },
+    exitButton: {
+      padding: 5,
+      backgroundColor: "orange",
+      borderTopEndRadius: 10,
+    },
+    exitButtonRow: {
+      width: 200,
+      padding: 0,
+      margin: 0,
+      left: 25,
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      borderRadius: 10,
     },
   });
   

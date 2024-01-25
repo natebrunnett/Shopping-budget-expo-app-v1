@@ -9,13 +9,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //import { LinearGradient } from 'expo-linear-gradient';
 
-const Home= ({goals, setGoals }) => {
+const Home= ({goals, setGoals, categories, setCategories }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
   const [goalInput, setGoalInput] = useState('');
   const [priceInput, setPriceInput] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Groceries');
+  const [selectedCategory, setSelectedCategory] = useState('Other');
 
   useEffect(() => {
     console.log("Home useEffect")
@@ -49,14 +49,25 @@ const Home= ({goals, setGoals }) => {
     setGoals(newList);
   }
 
-  const closeRow = (rowMap, rowKey) => {
+  const closeRow = (rowMap, rowKey, data) => {
     if (rowMap[rowKey]) {
         rowMap[rowKey].closeRow();
     }
+    const newData = [...categories];
+    const prevIndex = newData.findIndex(item => item.category === data.item.category);
+    const dateData = new Date(); console.log("new Date= " + dateData)
+    const localeDate = dateData.toLocaleDateString(); console.log("localeDate = " + localeDate)
+
+    data.date = localeDate;
+    console.log("data = "+ data)
+    console.log("prevIndex= " + prevIndex);
+    console.log("newData[prevIndex].list = " + newData[prevIndex].list)
+    newData[prevIndex].list.push(data)
+    setCategories(newData);
   };
 
   const deleteRow = (rowMap, rowKey) => {
-      closeRow(rowMap, rowKey);
+      //closeRow(rowMap, rowKey);
       const newData = [...goals];
       const prevIndex = goals.findIndex(item => item.key === rowKey);
       newData.splice(prevIndex, 1);
@@ -72,9 +83,9 @@ const Home= ({goals, setGoals }) => {
           <Text>Left</Text>
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnLeft]}
-              onPress={() => closeRow(rowMap, data.item.key)}
+              onPress={() => closeRow(rowMap, data.item.key, data)}
           >
-              <Text style={styles.backTextWhite}>Close</Text>
+              <Text style={styles.backTextWhite}>Confirm</Text>
           </TouchableOpacity>
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnRight]}
@@ -106,6 +117,15 @@ const Home= ({goals, setGoals }) => {
       </TouchableHighlight>
     )
   };
+
+  const renderPickerItems = () => (
+      categories.map((data, idx) => {
+        return(
+          <Picker.Item label={data.category} value={data.category} key={idx}/>
+        )
+      })
+    
+  )
 
   return(
   <View style={styles.centeredView}>
@@ -154,8 +174,8 @@ const Home= ({goals, setGoals }) => {
                   itemStyle={styles.itemStyle}
                   selectedValue={selectedCategory}
                   onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
-                  {/* category.map return picker item */}
-                  <Picker.Item label="Groceries" value="Groceries" />
+                  {categories && renderPickerItems()}
+                  <Picker.Item label="Other" value="Other" />
                 </Picker>
               </View>
 
@@ -275,7 +295,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   exitButtonRow: {
-    backgroundColor: "red",
     width: "100%",
     display: "flex",
     flexDirection: "row",
@@ -283,7 +302,8 @@ const styles = StyleSheet.create({
   },
   exitButton: {
     padding: 5,
-    backgroundColor: "orange"
+    backgroundColor: "orange",
+    borderTopEndRadius: 10,
   },
 
   goalInput: {

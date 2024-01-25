@@ -101,7 +101,9 @@ export default function Router() {
         >
         {props => <Home {...props}
         goals={goals}
-        setGoals={setGoals} 
+        setGoals={setGoals}
+        categories={categories}
+        setCategories={setCategories}
         />}
         </Stack.Screen>
         <Stack.Screen
