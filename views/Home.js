@@ -63,6 +63,8 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
     console.log("prevIndex= " + prevIndex);
     console.log("newData[prevIndex].list = " + newData[prevIndex].list)
     newData[prevIndex].list.push(data)
+    console.log("newData");
+    console.log(newData);
     setCategories(newData);
   };
 
