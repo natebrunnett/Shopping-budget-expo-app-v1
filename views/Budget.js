@@ -64,9 +64,11 @@ const Budget = ({categories, setCategories}) => {
 
     const renderCategoriesList = (list) => (
       list.map((data, idx) => {
+        console.log("categoryList Data");
+        console.log(data);
         return (
           <View key={idx}>
-          <Text>{data.item.body} {data.item.price} {data.item.date}</Text>
+          <Text>{data.item.body} {data.item.price} {data.date}</Text>
           </View>
         )
       })
