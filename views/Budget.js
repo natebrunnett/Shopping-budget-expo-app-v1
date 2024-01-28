@@ -75,6 +75,20 @@ const Budget = ({categories, setCategories}) => {
     )
   
 
+function Item({ category,key}) {
+    return (
+      <TouchableHighlight
+      onPress={() => console.log("flatlist touch"}
+      underlayColor={'#AAA'}
+      >
+        <View style={styles.listRow}>
+        <Text style={styles.listItem}>{category}</Text>
+        <AntDesign name="arrowright" size={24} color="black" />
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
     const renderCategories = () => (
 
       categories.map((data,idx) =>{
@@ -99,7 +113,7 @@ const Budget = ({categories, setCategories}) => {
             </ScrollView>
             <FlatList
             data={data.list}
-            renderItem={({ item }) => <Item title={item.category} id={item.key} />}
+            renderItem={({ item }) => <Item category={item.category} key={item.key} />}
             keyExtractor={item => item.key}
             />
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
