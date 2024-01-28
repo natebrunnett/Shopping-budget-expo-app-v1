@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal, Flatlist} from 'react-native'
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
@@ -97,6 +97,11 @@ const Budget = ({categories, setCategories}) => {
             <ScrollView>
               {data.list && renderCategoriesList(data.list)}
             </ScrollView>
+            <FlatList
+            data={data.list}
+            renderItem={({ item }) => <Item title={item.category} id={item.key} />}
+            keyExtractor={item => item.key}
+            />
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
           </View>
           )
