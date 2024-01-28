@@ -115,6 +115,7 @@ function Item({ category,key}) {
             data={data.list}
             renderItem={({ item }) => <Item category={item.category} key={item.key} />}
             keyExtractor={item => item.key}
+            horizontal=true 
             />
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
           </View>
