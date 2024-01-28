@@ -108,15 +108,15 @@ function Item({ category,key}) {
             <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
             <Text style={styles.catTitle}>Monthly budget</Text>
             <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
-            <ScrollView>
-              {data.list && renderCategoriesList(data.list)}
-            </ScrollView>
-            <FlatList
+            //<ScrollView>
+              //{data.list && renderCategoriesList(data.list)}
+            //</ScrollView>
+            {data.list && <FlatList
             data={data.list}
             renderItem={({ item }) => <Item category={item.category} key={item.key} />}
             keyExtractor={item => item.key}
             horizontal=true 
-            />
+            />}
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
           </View>
           )
