@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal, FlatList, TouchableHighlight} from 'react-native'
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
@@ -62,7 +62,8 @@ const Budget = ({categories, setCategories}) => {
     }
 
 
-    const renderCategoriesList = (list) => (
+    const renderCategoriesList = (list) => {
+      const Columns
       list.map((data, idx) => {
         console.log("categoryList Data");
         console.log(data);
@@ -72,8 +73,21 @@ const Budget = ({categories, setCategories}) => {
           </View>
         )
       })
-    )
+    }
   
+
+function Item({ category,key}) {
+    return (
+      <TouchableHighlight
+      onPress={() => console.log("flatlist touch")}
+      underlayColor={'#AAA'}
+      >
+        <View style={styles.listRow}>
+        <Text style={styles.listItem}>{category}</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  }
 
     const renderCategories = () => (
 
@@ -94,8 +108,20 @@ const Budget = ({categories, setCategories}) => {
             <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
             <Text style={styles.catTitle}>Monthly budget</Text>
             <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
+
             <Text style={{color:"orange"}}>History</Text>
-              {data.list && renderCategoriesList(data.list)}
+              {/* {data.list && renderCategoriesList(data.list)} */}
+
+            {/* //<ScrollView>
+              //{data.list && renderCategoriesList(data.list)}
+            //</ScrollView> */}
+            <View style={styles.FlatList}>
+            {data.list && <FlatList
+            data={data.list}
+            renderItem={({ item }) => <Item category={item.category} key={item.key} />}
+            keyExtractor={item => item.key}
+            />}
+            </View>
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
           </View>
           )
@@ -266,6 +292,10 @@ const styles = StyleSheet.create({
       justifyContent: "flex-end",
       borderRadius: 10,
     },
+    FlatList: {
+      backgroundColor: "red",
+      border: "white"
+    }
   });
   
 
