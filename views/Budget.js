@@ -61,29 +61,14 @@ const Budget = ({categories, setCategories}) => {
       setCategories(newList);
     }
 
-
-    const renderCategoriesList = (list) => {
-      const Columns
-      list.map((data, idx) => {
-        console.log("categoryList Data");
-        console.log(data);
-        return (
-          <View key={idx}>
-          <Text style={{color:"white"}}>{data.body} {data.price}€ {data.date} </Text>
-          </View>
-        )
-      })
-    }
-  
-
-function Item({ category,key}) {
+function Item({ data,key}) {
     return (
       <TouchableHighlight
       onPress={() => console.log("flatlist touch")}
       underlayColor={'#AAA'}
       >
         <View style={styles.listRow}>
-        <Text style={styles.listItem}>{category}</Text>
+        <Text style={styles.listItem}>{data.body} {data.price} {data.date}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -118,8 +103,8 @@ function Item({ category,key}) {
             <View style={styles.FlatList}>
             {data.list && <FlatList
             data={data.list}
-            renderItem={({ item }) => <Item category={item.category} key={item.key} />}
-            keyExtractor={item => item.key}
+            renderItem={({ data }) => <Item data={data} key={data.key} />}
+            keyExtractor={data => data.key}
             />}
             </View>
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
