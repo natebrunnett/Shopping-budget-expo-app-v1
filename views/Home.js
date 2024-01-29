@@ -58,14 +58,15 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
     const dateData = new Date(); console.log("new Date= " + dateData)
     const localeDate = dateData.toLocaleDateString(); console.log("localeDate = " + localeDate)
 
-    data.date = localeDate;
-    console.log("data = "+ data)
-    console.log("prevIndex= " + prevIndex);
-    console.log("newData[prevIndex].list = " + newData[prevIndex].list)
-    newData[prevIndex].list.push(data)
-    console.log("newData");
-    console.log(newData);
+    data.item.date = localeDate;
+    // console.log("data = "+ data)
+    // console.log("prevIndex= " + prevIndex);
+    // console.log("newData[prevIndex].list = " + newData[prevIndex].list)
+    newData[prevIndex].list.push(data.item)
+    // console.log("newData.list");
+    console.log(newData[prevIndex].list);
     setCategories(newData);
+    deleteRow(rowMap, rowKey);
   };
 
   const deleteRow = (rowMap, rowKey) => {

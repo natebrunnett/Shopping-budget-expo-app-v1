@@ -68,7 +68,7 @@ const Budget = ({categories, setCategories}) => {
         console.log(data);
         return (
           <View key={idx}>
-          <Text>{data.item.body} {data.item.price} {data.date}</Text>
+          <Text style={{color:"white"}}>{data.body} {data.price}€ {data.date} </Text>
           </View>
         )
       })
@@ -94,9 +94,8 @@ const Budget = ({categories, setCategories}) => {
             <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
             <Text style={styles.catTitle}>Monthly budget</Text>
             <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
-            <ScrollView>
+            <Text style={{color:"orange"}}>History</Text>
               {data.list && renderCategoriesList(data.list)}
-            </ScrollView>
             {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
           </View>
           )
