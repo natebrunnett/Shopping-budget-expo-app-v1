@@ -202,6 +202,8 @@ const Budget = ({categories, setCategories}) => {
                 <View style={styles.centeredView}>
                   <ScrollView>
                     <View style={styles.modalView}>
+                      
+                      //extend a bar on top to increase width of modal
                       <View style={styles.exitButtonRow}>
                         <Pressable
                           style={styles.exitButton}
@@ -209,29 +211,37 @@ const Budget = ({categories, setCategories}) => {
                           <Text style={styles.textStyle}>X</Text>
                         </Pressable>
                       </View>
+                      
                       <Text style={styles.modalText}>Category</Text>
+                      
                       <TextInput 
                         value={catInput} 
                         style={styles.input}
                         onChangeText={(text) => setCatInput(text)}
                         ></TextInput>
+                        
                       <Text style={styles.modalText}>WeeklyBudget</Text>
+                      
                       <TextInput 
                         value={weeklyInput} 
                         style={styles.input}
                         onChangeText={(text) => setWeeklyInput(text)}
                         ></TextInput>
+                      
                       <Text style={styles.modalText}>MonthlyBudget</Text>
+                      
                       <TextInput 
                         value={monthlyInput} 
                         style={styles.input}
                         onChangeText={(text) => setMonthlyInput(text)}
                         ></TextInput>
+                      
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {setModalVisible(!modalVisible), addCategory()}}>
                         <Text style={styles.textStyle}>Hide Modal</Text>
                       </Pressable>
+                    
                     </View>
                   </ScrollView>
                 </View>
