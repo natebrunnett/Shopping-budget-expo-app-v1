@@ -61,6 +61,7 @@ const Budget = ({categories, setCategories}) => {
       setCategories(newList);
     }
 
+
     // function Item({ item }) {
     //     return (
     //         <View style={styles.listRow}>
@@ -102,6 +103,8 @@ const Budget = ({categories, setCategories}) => {
       return total
     }
 
+
+
     const renderCategories = () => (
 
       categories.map((data,idx) =>{
@@ -133,6 +136,10 @@ const Budget = ({categories, setCategories}) => {
                 <Text style={styles.catTitle}>Monthly Budget</Text>
                 <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
               </View>
+
+            {/* //<ScrollView>
+              //{data.list && renderCategoriesList(data.list)}
+            //</ScrollView> */}
 
             </View>
 
