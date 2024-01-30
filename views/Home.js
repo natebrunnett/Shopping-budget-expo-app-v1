@@ -102,7 +102,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
   const renderItem = (data) => {
     return(
       <TouchableHighlight
-          onPress={() => console.log('You touched me')}
+          onPress={() => console.log('Row touched')}
           style={styles.rowFront}
           underlayColor={'#AAA'}
       >

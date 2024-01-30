@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal, FlatList, TouchableHighlight} from 'react-native'
+import { StyleSheet, View, Text, ScrollView, TextInput, Pressable, Modal, FlatList, TouchableHighlight, TouchableOpacity} from 'react-native'
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
@@ -73,7 +74,7 @@ const Budget = ({categories, setCategories}) => {
     const renderCategoriesBodyTags = (list) => (
       list.map((data, idx) => {
         return(
-            <Text style={styles.listItem} key={idx}>{data.body}</Text>
+            <Text style={styles.listItemText} key={idx}>{data.body}</Text>
         )
       })
     )
@@ -103,86 +104,114 @@ const Budget = ({categories, setCategories}) => {
       return total
     }
 
+    const closeRow = (rowMap, rowKey, data) => {
+      // if (rowMap[rowKey]) {
+      //     rowMap[rowKey].closeRow();
+      // }
+      // const newData = [...categories];
+      // const prevIndex = newData.findIndex(item => item.category === data.item.category);
+      // const dateData = new Date(); console.log("new Date= " + dateData)
+      // const localeDate = dateData.toLocaleDateString(); console.log("localeDate = " + localeDate)
+  
+      // data.item.date = localeDate;
+      // // console.log("data = "+ data)
+      // // console.log("prevIndex= " + prevIndex);
+      // // console.log("newData[prevIndex].list = " + newData[prevIndex].list)
+      // newData[prevIndex].list.push(data.item)
+      // // console.log("newData.list");
+      // console.log(newData[prevIndex].list);
+      // setCategories(newData);
+      // deleteRow(rowMap, rowKey);
+      console.log("row closed")
+    };
+  
+    const deleteRow = (rowMap, rowKey) => {
+        //closeRow(rowMap, rowKey);
+        // const newData = [...goals];
+        // const prevIndex = goals.findIndex(item => item.key === rowKey);
+        // newData.splice(prevIndex, 1);
+        // setGoals(newData);
+        console.log("row deleted")
+    };
+
+    const renderHiddenItem = (data, rowMap) => (
+      <View style={styles.rowBack}>
+          <Text>Left</Text>
+          <TouchableOpacity
+              style={[styles.backRightBtn, styles.backRightBtnLeft]}
+              onPress={() => closeRow(rowMap, data.item.key, data)}
+          >
+              <Text style={styles.backTextWhite}>Confirm</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+              style={[styles.backRightBtn, styles.backRightBtnRight]}
+              onPress={() => deleteCategory(data.item.key)}
+          >
+              <Text style={styles.backTextWhite}>Delete</Text>
+          </TouchableOpacity>
+      </View>
+  );
 
 
-    const renderCategories = () => (
-
-      categories.map((data,idx) =>{
+    const renderCategories = (data) => {
          
-          return(
-          <View style={styles.catContainer} key={idx}>
-            
-            <View style={styles.deleteButtonRow}>
-              <Pressable
-                style={styles.deleteButton}
-                onPress={() => deleteCategory(data.key)}>
-                  <Text>Delete</Text>
-              </Pressable>
-            </View>
+      return(
+      <TouchableHighlight
+        onPress={() => console.log('Row touched')} 
+        style={styles.catContainer}
+        underlayColor={'#AAA'}
+      >
+        <View style={{backgroundColor: '#212121'}}>
 
-            <View style={styles.catHeaderContainer}>
-            
-              <View style={styles.catInfoContainer}>
-                <Text style={styles.catTitle}>Category</Text>
-                <Text style={styles.catContainerText}>{data.category}</Text>
-              </View>
-
-              <View style={styles.catInfoContainer}>
-                <Text style={styles.catTitle}>Weekly Budget</Text>
-                <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
-              </View>
-
-              <View style={styles.catInfoContainer}>
-                <Text style={styles.catTitle}>Monthly Budget</Text>
-                <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
-              </View>
-
-            {/* //<ScrollView>
-              //{data.list && renderCategoriesList(data.list)}
-            //</ScrollView> */}
-
+          <View style={styles.catHeaderContainer}>
+          
+            <View style={styles.catInfoContainer}>
+              <Text style={styles.catTitle}>Category</Text>
+              <Text style={styles.catContainerText}>{data.item.category}</Text>
             </View>
 
             <View style={styles.catInfoContainer}>
-              <Text style={{color:"orange"}}>History</Text>
+              <Text style={styles.catTitle}>Weekly Budget</Text>
+              <Text style={styles.catContainerText}>{data.item.weeklyBudget}</Text>
             </View>
 
-            <View style={styles.historyContainer}>
-              <View>
-                {data.list && renderCategoriesBodyTags(data.list)}
-              </View>
-              <View>
-                {data.list && renderCategoriesPriceTags(data.list)}
-              </View>
-              <View>
-                {data.list && renderCategoriesDateTags(data.list)}
-              </View>
-            </View>
-
-            <View style={styles.totalHeader}>
-              <Text style={{color: 'orange', marginBottom: 0, paddingBottom: 0}}>Total</Text>
-              <Text style={styles.listItem}>{renderTotal(data.list)}€</Text>
+            <View style={styles.catInfoContainer}>
+              <Text style={styles.catTitle}>Monthly Budget</Text>
+              <Text style={styles.catContainerText}>{data.item.monthlyBudget}</Text>
             </View>
 
           </View>
-          )
-      
-        })
-      
-    )
+
+          <View style={styles.catInfoContainer}>
+            <Text style={{color:"orange"}}>History</Text>
+          </View>
+
+          <View style={styles.historyContainer}>
+            <View>
+              {data.item.list && renderCategoriesBodyTags(data.item.list)}
+            </View>
+            <View>
+              {data.item.list && renderCategoriesPriceTags(data.item.list)}
+            </View>
+            <View>
+              {data.item.list && renderCategoriesDateTags(data.item.list)}
+            </View>
+          </View>
+
+          <View style={styles.totalHeader}>
+            <Text style={{color: 'orange', marginBottom: 0, paddingBottom: 0}}>Total</Text>
+            <Text style={styles.listItem}>{renderTotal(data.item.list)}€</Text>
+          </View>
+        </View>
+
+      </TouchableHighlight>
+      )
+    }
 
 
     return (
         <View style={styles.container}>
-            <View style={styles.inputContainer}>
-              <Text style={{color: "orange"}}>Add Category</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(true)}>
-                <Text style={styles.textStyle}>Let's do it!</Text>
-              </Pressable>
-              
-            </View>
+            
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -228,9 +257,26 @@ const Budget = ({categories, setCategories}) => {
                   </ScrollView>
                 </View>
               </Modal>
-            <ScrollView>
+            {/* <ScrollView>
             {renderCategories()}
-            </ScrollView>
+            </ScrollView> */}
+            <SwipeListView
+                data={categories}
+                renderItem={renderCategories}
+                renderHiddenItem={renderHiddenItem}
+                leftOpenValue={75}
+                rightOpenValue={-150}
+                previewRowKey={'0'}
+                previewOpenValue={-40}
+                previewOpenDelay={3000}
+            />
+            <View style={styles.Pressable}>
+              <Pressable
+                style={styles.PressableButton}
+                onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>+</Text>
+              </Pressable>
+            </View>
             
         </View>
     );
@@ -241,6 +287,21 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems: "center",
       backgroundColor: '#212121',
+    },
+    Pressable: {
+      position: 'absolute',
+      bottom: 5,
+      right: 5
+    },
+    PressableButton: {
+      border: 'black',
+      borderWidth: 2,
+      borderRadius: 35,
+      paddingTop: 32,
+      paddingBottom: 32,
+      paddingLeft: 37,
+      paddingRight: 37,
+      backgroundColor: 'gray'
     },
     inputContainer: {
       flexDirection: "row",
@@ -264,14 +325,16 @@ const styles = StyleSheet.create({
     historyContainer: {
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-evenly'
+      justifyContent: 'space-evenly',
     },
 
     totalHeader: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      marginTop: 5
+      marginTop: 10,
+      paddingBottom: 10,
+      borderBottomWidth: 1,
     },
 
     listRow: {
@@ -285,11 +348,17 @@ const styles = StyleSheet.create({
       color: 'white',
     },
 
+    listItemText: {
+      color: 'white',
+    },
+
     catHeaderContainer: {
+      width: "100%",
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       marginBottom: 10,
+      marginTop: 5,
     },
 
     catInfoContainer: {
@@ -373,7 +442,48 @@ const styles = StyleSheet.create({
     FlatList: {
       backgroundColor: "red",
       border: "white"
-    }
+    },
+
+    // SwipeListView start
+
+  backTextWhite: {
+    color: '#FFF',
+  },
+  rowFront: {
+      alignItems: 'center',
+      backgroundColor: '#2a2a2a',
+      borderBottomColor: 'black',
+      borderBottomWidth: 1,
+      justifyContent: 'center',
+      height: 50,
+  },
+  rowBack: {
+      alignItems: 'center',
+      backgroundColor: '#DDD',
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingLeft: 15,
+  },
+  backRightBtn: {
+      alignItems: 'center',
+      bottom: 0,
+      justifyContent: 'center',
+      position: 'absolute',
+      top: 0,
+      width: 75,
+  },
+  backRightBtnLeft: {
+      backgroundColor: 'blue',
+      right: 75,
+  },
+  backRightBtnRight: {
+      backgroundColor: 'red',
+      right: 0,
+  },
+
+// SwipeListView end
+
   });
   
 
