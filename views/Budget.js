@@ -71,30 +71,6 @@ const Budget = ({categories, setCategories}) => {
     //     );
     // }
 
-    const renderCategoriesBodyTags = (list) => (
-      list.map((data, idx) => {
-        return(
-            <Text style={styles.listItemText} key={idx}>{data.body}</Text>
-        )
-      })
-    )
-    const renderCategoriesPriceTags = (list) => (
-      list.map((data, idx) => {
-        return(
-            <Text style={styles.listItem} key={idx}>{data.price}</Text>
-        )
-      })
-    )
-
-    const renderCategoriesDateTags = (list) => (
-      list.map((data, idx) => {
-        return(
-            <Text style={styles.listItem} key={idx}>{data.date}</Text>
-        )
-      })
-    )
-         
-
     const renderTotal = (list) => {
       let total = 0;
       const numberArray = list.map((x) => x.price);
@@ -136,12 +112,11 @@ const Budget = ({categories, setCategories}) => {
 
     const renderHiddenItem = (data, rowMap) => (
       <View style={styles.rowBack}>
-          <Text>Left</Text>
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnLeft]}
               onPress={() => closeRow(rowMap, data.item.key, data)}
           >
-              <Text style={styles.backTextWhite}>Confirm</Text>
+              <Text style={styles.backTextWhite}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnRight]}
@@ -171,32 +146,36 @@ const Budget = ({categories, setCategories}) => {
             </View>
 
             <View style={styles.catInfoContainer}>
-              <Text style={styles.catTitle}>Weekly Budget</Text>
+              <Text style={styles.catTitle}>Weekly</Text>
               <Text style={styles.catContainerText}>{data.item.weeklyBudget}</Text>
             </View>
 
             <View style={styles.catInfoContainer}>
-              <Text style={styles.catTitle}>Monthly Budget</Text>
+              <Text style={styles.catTitle}>Monthly</Text>
               <Text style={styles.catContainerText}>{data.item.monthlyBudget}</Text>
             </View>
 
           </View>
 
-          <View style={styles.catInfoContainer}>
+          <View style={styles.historyTitle}>
             <Text style={{color:"orange"}}>History</Text>
           </View>
 
-          <View style={styles.historyContainer}>
-            <View>
-              {data.item.list && renderCategoriesBodyTags(data.item.list)}
-            </View>
-            <View>
-              {data.item.list && renderCategoriesPriceTags(data.item.list)}
-            </View>
-            <View>
-              {data.item.list && renderCategoriesDateTags(data.item.list)}
-            </View>
-          </View>
+          {data.item.list && data.item.list.map((listData, idx) => {
+            return(
+            <View style={styles.historyContainer} key={idx}>
+              <View>
+                <Text style={styles.listItemBody}>{listData.body}</Text>
+              </View>
+              <View>
+                <Text style={styles.listItemPrice}>{listData.price}</Text>
+              </View>
+              <View>
+                <Text style={styles.listItemDate}>{listData.date}</Text>
+              </View>
+            </View>)
+          })}
+          
 
           <View style={styles.totalHeader}>
             <Text style={{color: 'orange', marginBottom: 0, paddingBottom: 0}}>Total</Text>
@@ -314,12 +293,19 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       justifyContent: 'center',
       margin: "5%",
-      color: 'black',
+      color: 'white',
     },
     textStyle: {
       color: 'white',
       fontWeight: 'bold',
       textAlign: 'center',
+    },
+
+    historyTitle: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 5,
     },
 
     historyContainer: {
@@ -348,8 +334,18 @@ const styles = StyleSheet.create({
       color: 'white',
     },
 
-    listItemText: {
+    listItemBody: {
       color: 'white',
+      width: 250,
+    },
+    listItemPrice: {
+      color: 'white',
+      width: 40,
+    },
+    listItemDate: {
+      color: 'white',
+      width: 90,
+
     },
 
     catHeaderContainer: {
@@ -366,6 +362,7 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       alignItems: 'center',
       gap: 5,
+      width: 100,
     },
     catContainer: {
       width: "100%",
@@ -395,7 +392,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
       marginTop: 70,
-      backgroundColor: 'white',
+      backgroundColor: 'black',
       borderRadius: 20,
       padding: 25,
       paddingTop: 0,
@@ -409,6 +406,13 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5,
     },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
+      color: 'white',
+      width: "100%",
+      backgroundColor: 'red'
+    },
     button: {
       borderRadius: 20,
       padding: 10,
@@ -419,10 +423,6 @@ const styles = StyleSheet.create({
     },
     buttonClose: {
       backgroundColor: 'green',
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: 'center',
     },
     exitButton: {
       padding: 5,
