@@ -31,7 +31,7 @@ const Budget = ({categories, setCategories}) => {
         category: catInput,
         weeklyBudget: weeklyInput,
         monthlyBudget: monthlyInput,
-        list: []
+        list: [],
       }
       newList.push(newObject)
       setCategories(newList);
@@ -61,33 +61,46 @@ const Budget = ({categories, setCategories}) => {
       setCategories(newList);
     }
 
+    // function Item({ item }) {
+    //     return (
+    //         <View style={styles.listRow}>
+    //           <Text style={styles.listItem}>{item.body} {item.price} {item.date}</Text>
+    //         </View>
+    //     );
+    // }
 
-    const renderCategoriesList = (list) => {
-      const Columns
+    const renderCategoriesBodyTags = (list) => (
       list.map((data, idx) => {
-        console.log("categoryList Data");
-        console.log(data);
-        return (
-          <View key={idx}>
-          <Text style={{color:"white"}}>{data.body} {data.price}€ {data.date} </Text>
-          </View>
+        return(
+            <Text style={styles.listItem} key={idx}>{data.body}</Text>
         )
       })
-    }
-  
+    )
+    const renderCategoriesPriceTags = (list) => (
+      list.map((data, idx) => {
+        return(
+            <Text style={styles.listItem} key={idx}>{data.price}</Text>
+        )
+      })
+    )
 
-function Item({ category,key}) {
-    return (
-      <TouchableHighlight
-      onPress={() => console.log("flatlist touch")}
-      underlayColor={'#AAA'}
-      >
-        <View style={styles.listRow}>
-        <Text style={styles.listItem}>{category}</Text>
-        </View>
-      </TouchableHighlight>
-    );
-  }
+    const renderCategoriesDateTags = (list) => (
+      list.map((data, idx) => {
+        return(
+            <Text style={styles.listItem} key={idx}>{data.date}</Text>
+        )
+      })
+    )
+         
+
+    const renderTotal = (list) => {
+      let total = 0;
+      const numberArray = list.map((x) => x.price);
+      for (let i = 0; i < numberArray.length; i++){
+        total += parseInt(numberArray[i])
+      }
+      return total
+    }
 
     const renderCategories = () => (
 
@@ -95,6 +108,7 @@ function Item({ category,key}) {
          
           return(
           <View style={styles.catContainer} key={idx}>
+            
             <View style={styles.deleteButtonRow}>
               <Pressable
                 style={styles.deleteButton}
@@ -102,32 +116,51 @@ function Item({ category,key}) {
                   <Text>Delete</Text>
               </Pressable>
             </View>
-            <Text style={styles.catTitle}>Category</Text>
-            <Text style={styles.catContainerText}>{data.category}</Text>
-            <Text style={styles.catTitle}>Weekly budget</Text>
-            <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
-            <Text style={styles.catTitle}>Monthly budget</Text>
-            <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
 
-            <Text style={{color:"orange"}}>History</Text>
-              {/* {data.list && renderCategoriesList(data.list)} */}
+            <View style={styles.catHeaderContainer}>
+            
+              <View style={styles.catInfoContainer}>
+                <Text style={styles.catTitle}>Category</Text>
+                <Text style={styles.catContainerText}>{data.category}</Text>
+              </View>
 
-            {/* //<ScrollView>
-              //{data.list && renderCategoriesList(data.list)}
-            //</ScrollView> */}
-            <View style={styles.FlatList}>
-            {data.list && <FlatList
-            data={data.list}
-            renderItem={({ item }) => <Item category={item.category} key={item.key} />}
-            keyExtractor={item => item.key}
-            />}
+              <View style={styles.catInfoContainer}>
+                <Text style={styles.catTitle}>Weekly Budget</Text>
+                <Text style={styles.catContainerText}>{data.weeklyBudget}</Text>
+              </View>
+
+              <View style={styles.catInfoContainer}>
+                <Text style={styles.catTitle}>Monthly Budget</Text>
+                <Text style={styles.catContainerText}>{data.monthlyBudget}</Text>
+              </View>
+
             </View>
-            {/* <Text style={styles.catContainerText}>{data.key}</Text> */}
+
+            <View style={styles.catInfoContainer}>
+              <Text style={{color:"orange"}}>History</Text>
+            </View>
+
+            <View style={styles.historyContainer}>
+              <View>
+                {data.list && renderCategoriesBodyTags(data.list)}
+              </View>
+              <View>
+                {data.list && renderCategoriesPriceTags(data.list)}
+              </View>
+              <View>
+                {data.list && renderCategoriesDateTags(data.list)}
+              </View>
+            </View>
+
+            <View style={styles.totalHeader}>
+              <Text style={{color: 'orange', marginBottom: 0, paddingBottom: 0}}>Total</Text>
+              <Text style={styles.listItem}>{renderTotal(data.list)}€</Text>
+            </View>
+
           </View>
           )
       
         })
-      
       
     )
 
@@ -219,6 +252,44 @@ const styles = StyleSheet.create({
       color: 'white',
       fontWeight: 'bold',
       textAlign: 'center',
+    },
+
+    historyContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-evenly'
+    },
+
+    totalHeader: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginTop: 5
+    },
+
+    listRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      width: "100%"
+    },
+
+    listItem: {
+      color: 'white',
+    },
+
+    catHeaderContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      marginBottom: 10,
+    },
+
+    catInfoContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 5,
     },
     catContainer: {
       width: "100%",

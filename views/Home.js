@@ -15,7 +15,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
 
   const [goalInput, setGoalInput] = useState('');
   const [priceInput, setPriceInput] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Other');
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     console.log("Home useEffect")
@@ -178,7 +178,6 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
                   selectedValue={selectedCategory}
                   onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
                   {categories && renderPickerItems()}
-                  <Picker.Item label="Other" value="Other" />
                 </Picker>
               </View>
 

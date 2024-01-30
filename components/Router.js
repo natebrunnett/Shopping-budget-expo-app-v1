@@ -55,8 +55,14 @@ export default function Router() {
     try {
       const value = await AsyncStorage.getItem('categories');
       let bringBackToArray= JSON.parse(value)
-      if(bringBackToArray === null){
-        setCategories([]);
+      if(bringBackToArray === null || bringBackToArray === undefined || bringBackToArray.length === 0){
+        setCategories([{
+          key: uuid.v4(), 
+          category: 'Other',
+          weeklyBudget: 1,
+          monthlyBudget: 4,
+          list: []
+        }]);
       }else setCategories(bringBackToArray);
       console.log("retrieved categories= " + bringBackToArray)
   // now we have data restored from asyncStorage parsed back into an array which we can use
