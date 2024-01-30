@@ -239,7 +239,7 @@ const Budget = ({categories, setCategories}) => {
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {setModalVisible(!modalVisible), addCategory()}}>
-                        <Text style={styles.textStyle}>Hide Modal</Text>
+                        <Text style={styles.textStyle}>Submit</Text>
                       </Pressable>
                     
                     </View>
