@@ -203,7 +203,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
                 previewOpenDelay={3000}
                 onRowDidOpen={onRowDidOpen}
             />
-            
+      /*
       <View style={{
         display: "flex",
         alignItems: "center",
@@ -217,6 +217,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
           <Text style={styles.textStyle}>Create</Text>
         </Pressable>
       </View>
+      */
 
        <View style={styles.Pressable}>
           <Pressable
@@ -400,6 +401,26 @@ const styles = StyleSheet.create({
   },
 
   //picker end
+
+  //pressable start
+
+  Pressable: {
+      position: 'absolute',
+      bottom: 5,
+      right: 5
+    },
+    PressableButton: {
+      border: 'black',
+      borderWidth: 2,
+      borderRadius: 35,
+      paddingTop: 32,
+      paddingBottom: 32,
+      paddingLeft: 37,
+      paddingRight: 37,
+      backgroundColor: 'gray'
+    },
+
+  //pressable end
 
 });
 
