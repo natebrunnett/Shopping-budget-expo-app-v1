@@ -48,9 +48,16 @@ const Budget = ({categories, setCategories}) => {
 
     }
     
-    const updateCategory = () => {
+    const updateCategory = (key) => {
       //findindex
       //splice at index and replace with current Category
+      const idx = categories.findIndex((element) => element.key === key) 
+      console.log("idx= "+idx)
+      categories.splice(idx, 1, newCategory);
+      //set all inputs to zero
+      setCatInput('');
+      setWeeklyInput('');
+      setMonthlyInput('');
     }
 
     const _storeData = async () => {
@@ -286,7 +293,7 @@ const Budget = ({categories, setCategories}) => {
                           style={[styles.button, styles.buttonClose]}
                           onPress={() => {
                             setModalVisible(!modalVisible), 
-                            console.log("updateCategory"),
+                            updateCategory(currentKey),
                             setUpdateMode(false),
                             setKey(null)}}>
                           <Text style={styles.textStyle}>Update</Text>
