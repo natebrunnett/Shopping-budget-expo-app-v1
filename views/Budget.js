@@ -53,6 +53,15 @@ const Budget = ({categories, setCategories}) => {
       //splice at index and replace with current Category
       const idx = categories.findIndex((element) => element.key === key) 
       console.log("idx= "+idx)
+      console.log("categoties[" + idx + "] = " + categories[idx]);
+      const  = {
+        key: uuid.v4(), 
+        category: catInput,
+        weeklyBudget: weeklyInput,
+        monthlyBudget: monthlyInput,
+        list: [],
+      }
+      
       //categories.splice(idx, 1, newCategory);
       //set all inputs to zero
       setCatInput('');
