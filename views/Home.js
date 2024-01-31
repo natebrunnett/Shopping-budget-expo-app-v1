@@ -222,7 +222,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
        <View style={styles.Pressable}>
           <Pressable
             style={styles.PressableButton}
-            onPress={() => {setModalVisible(true), setCreateMode(true)}}>
+            onPress={() => setModalVisible(true)}>
              <Text style={styles.textStyle}>+</Text>
           </Pressable>
         </View>
