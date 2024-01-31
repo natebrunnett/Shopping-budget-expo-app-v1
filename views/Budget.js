@@ -47,6 +47,11 @@ const Budget = ({categories, setCategories}) => {
       
 
     }
+    
+    const updateCategory = () => {
+      //findindex
+      //splice at index and replace with current Category
+    }
 
     const _storeData = async () => {
       try {
@@ -124,7 +129,10 @@ const Budget = ({categories, setCategories}) => {
                 closeRow(rowMap, data.item.key, data), 
                 setUpdateMode(true), 
                 setKey(data.item.key),
-                setModalVisible(true)}}
+                setModalVisible(true),
+                setCatInput({data.item.category}),
+                setWeeklyInput({data.item.weeklyBudget}),
+                setMonthlyInput({data.item.monthlyBudget})}}
           >
               <Text style={styles.backTextWhite}>Edit</Text>
           </TouchableOpacity>
