@@ -203,6 +203,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
                 previewOpenDelay={3000}
                 onRowDidOpen={onRowDidOpen}
             />
+            
       <View style={{
         display: "flex",
         alignItems: "center",
@@ -217,6 +218,13 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
         </Pressable>
       </View>
 
+       <View style={styles.Pressable}>
+          <Pressable
+            style={styles.PressableButton}
+            onPress={() => {setModalVisible(true), setCreateMode(true)}}>
+             <Text style={styles.textStyle}>+</Text>
+          </Pressable>
+        </View>
 
   </View>
 
