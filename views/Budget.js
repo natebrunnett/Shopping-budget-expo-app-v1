@@ -19,6 +19,10 @@ const Budget = ({categories, setCategories}) => {
   const [weeklyInput, setWeeklyInput] = useState('');
   const [monthlyInput, setMonthlyInput] = useState('');
 
+  const [createMode, setCreateMode] = useState(false);
+  const [updateMode, setUpdateMode] = useState(false);
+  const [currentKey, setKey] = useState(null);
+
     useEffect(() => {
         console.log("Budget.js useEffect")
         _storeData()
@@ -37,6 +41,8 @@ const Budget = ({categories, setCategories}) => {
       newList.push(newObject)
       setCategories(newList);
       setCatInput('');
+      setWeeklyInput('');
+      setMonthlyInput('');
       console.log(categories);
       
 
@@ -114,16 +120,22 @@ const Budget = ({categories, setCategories}) => {
       <View style={styles.rowBack}>
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnLeft]}
-              onPress={() => closeRow(rowMap, data.item.key, data)}
+              onPress={() => {
+                closeRow(rowMap, data.item.key, data), 
+                setUpdateMode(true), 
+                setKey(data.item.key),
+                setModalVisible(true)}}
           >
               <Text style={styles.backTextWhite}>Edit</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnRight]}
               onPress={() => deleteCategory(data.item.key)}
           >
               <Text style={styles.backTextWhite}>Delete</Text>
           </TouchableOpacity>
+          
       </View>
   );
 
@@ -203,44 +215,76 @@ const Budget = ({categories, setCategories}) => {
                   <ScrollView>
                     <View style={styles.modalView}>
                       
-                      //extend a bar on top to increase width of modal
+                      {/* //extend a bar on top to increase width of modal */}
                       <View style={styles.exitButtonRow}>
                         <Pressable
                           style={styles.exitButton}
-                          onPress={() => setModalVisible(!modalVisible)}>
+                          onPress={() => {
+                            setModalVisible(!modalVisible),
+                            setCreateMode(false),
+                            setUpdateMode(false),
+                            setKey(null),
+                            setCatInput(''),
+                            setWeeklyInput(''),
+                            setMonthlyInput('')
+                            }}>
                           <Text style={styles.textStyle}>X</Text>
                         </Pressable>
                       </View>
                       
-                      <Text style={styles.modalText}>Category</Text>
-                      
-                      <TextInput 
-                        value={catInput} 
-                        style={styles.input}
-                        onChangeText={(text) => setCatInput(text)}
-                        ></TextInput>
-                        
-                      <Text style={styles.modalText}>WeeklyBudget</Text>
-                      
-                      <TextInput 
-                        value={weeklyInput} 
-                        style={styles.input}
-                        onChangeText={(text) => setWeeklyInput(text)}
-                        ></TextInput>
-                      
-                      <Text style={styles.modalText}>MonthlyBudget</Text>
-                      
-                      <TextInput 
-                        value={monthlyInput} 
-                        style={styles.input}
-                        onChangeText={(text) => setMonthlyInput(text)}
-                        ></TextInput>
-                      
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {setModalVisible(!modalVisible), addCategory()}}>
-                        <Text style={styles.textStyle}>Submit</Text>
-                      </Pressable>
+                      <View style={styles.modalContainer}>
+                        <Text style={styles.modalText}>Category</Text>
+                        <TextInput 
+                          value={catInput} 
+                          style={styles.input}
+                          onChangeText={(text) => setCatInput(text)}
+                          ></TextInput>
+                      </View>
+
+                      <View style={styles.modalContainer}>
+                        <Text style={styles.modalText}>Weekly</Text>
+                        <TextInput 
+                          value={weeklyInput} 
+                          style={styles.input}
+                          onChangeText={(text) => setWeeklyInput(text)}
+                          ></TextInput>
+                      </View>
+
+                      <View style={styles.modalContainer}>
+                        <Text style={styles.modalText}>Monthly</Text>
+                        <TextInput 
+                          value={monthlyInput} 
+                          style={styles.input}
+                          onChangeText={(text) => setMonthlyInput(text)}
+                          ></TextInput>
+                      </View>
+
+                      {createMode &&
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => {
+                            setModalVisible(!modalVisible), 
+                            addCategory(),
+                            setCreateMode(false)}}>
+                          <Text style={styles.textStyle}>Create</Text>
+                        </Pressable>
+                      }
+
+                      {updateMode &&
+                        <> 
+                        <Text style={{color: 'white'}}>Key {currentKey}</Text>
+
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => {
+                            setModalVisible(!modalVisible), 
+                            console.log("updateCategory"),
+                            setUpdateMode(false),
+                            setKey(null)}}>
+                          <Text style={styles.textStyle}>Update</Text>
+                        </Pressable>
+                        </>
+                      }
                     
                     </View>
                   </ScrollView>
@@ -262,7 +306,7 @@ const Budget = ({categories, setCategories}) => {
             <View style={styles.Pressable}>
               <Pressable
                 style={styles.PressableButton}
-                onPress={() => setModalVisible(true)}>
+                onPress={() => {setModalVisible(true), setCreateMode(true)}}>
                 <Text style={styles.textStyle}>+</Text>
               </Pressable>
             </View>
@@ -416,12 +460,17 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5,
     },
+    modalContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
     modalText: {
       marginBottom: 15,
       textAlign: 'center',
       color: 'white',
       width: "100%",
-      backgroundColor: 'red'
+      fontSize: 22,
     },
     button: {
       borderRadius: 20,
@@ -440,7 +489,7 @@ const styles = StyleSheet.create({
       borderTopEndRadius: 10,
     },
     exitButtonRow: {
-      width: 200,
+      width: 360,
       padding: 0,
       margin: 0,
       left: 25,
