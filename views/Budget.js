@@ -53,7 +53,7 @@ const Budget = ({categories, setCategories}) => {
       //splice at index and replace with current Category
       const idx = categories.findIndex((element) => element.key === key) 
       console.log("idx= "+idx)
-      categories.splice(idx, 1, newCategory);
+      //categories.splice(idx, 1, newCategory);
       //set all inputs to zero
       setCatInput('');
       setWeeklyInput('');
