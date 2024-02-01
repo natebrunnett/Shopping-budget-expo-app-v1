@@ -180,21 +180,17 @@ const Budget = ({categories, setCategories}) => {
           {data.item.list && data.item.list.map((listData, idx) => {
             return(
             <View style={styles.historyContainer} key={idx}>
-              <View>
+
                 <Text style={styles.listItemBody}>{listData.body}</Text>
-              </View>
-              <View>
                 <Text style={styles.listItemPrice}>{listData.price}</Text>
-              </View>
-              <View>
                 <Text style={styles.listItemDate}>{listData.date}</Text>
-              </View>
+
             </View>)
           })}
           
 
           <View style={styles.totalHeader}>
-            <Text style={{color: 'orange', marginBottom: 0, paddingBottom: 0}}>Total</Text>
+            <Text style={{color: 'orange', marginBottom: 0, paddingBottom: 0, marginTop: 0}}>Total</Text>
             <Text style={styles.listItem}>{renderTotal(data.item.list)}€</Text>
           </View>
         </View>
@@ -276,7 +272,7 @@ const Budget = ({categories, setCategories}) => {
 
                       {updateMode &&
                         <> 
-                        <Text style={{color: 'white'}}>Key {currentKey}</Text>
+                        {/* <Text style={{color: 'white'}}>Key {currentKey}</Text> */}
 
                         <Pressable
                           style={[styles.button, styles.buttonClose]}
@@ -370,13 +366,14 @@ const styles = StyleSheet.create({
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-evenly',
+      marginBottom: 5,
     },
 
     totalHeader: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      marginTop: 10,
+      marginTop: 8,
       paddingBottom: 10,
       borderBottomWidth: 1,
     },
@@ -394,15 +391,16 @@ const styles = StyleSheet.create({
 
     listItemBody: {
       color: 'white',
-      width: 250,
+      width: "56%",
     },
     listItemPrice: {
       color: 'white',
-      width: 40,
+      width: "24%",
     },
     listItemDate: {
       color: 'white',
-      width: 90,
+      width: "20%",
+      textAlign: 'right'
 
     },
 
@@ -426,7 +424,8 @@ const styles = StyleSheet.create({
       width: "100%",
     },
     catContainerText: {
-      color: 'white'
+      color: 'white',
+      textAlign: 'center'
     },
     catTitle: {
       color: 'orange'
@@ -450,7 +449,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
       marginTop: 70,
-      backgroundColor: 'black',
+      backgroundColor: '#555555',
       borderRadius: 20,
       padding: 25,
       paddingTop: 0,
@@ -463,6 +462,8 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+      paddingRight: 0,
+      paddingLeft: 0,
     },
     modalContainer: {
       display: 'flex',
@@ -487,21 +488,19 @@ const styles = StyleSheet.create({
     buttonClose: {
       backgroundColor: 'green',
     },
-    exitButton: {
-      padding: 5,
-      backgroundColor: "orange",
-      borderTopEndRadius: 10,
-    },
     exitButtonRow: {
-      width: 360,
-      padding: 0,
-      margin: 0,
-      left: 25,
+      width: "100%",
       display: "flex",
       flexDirection: "row",
       justifyContent: "flex-end",
-      borderRadius: 10,
+      padding: 0,
     },
+    exitButton: {
+      padding: 10,
+      backgroundColor: "orange",
+      borderTopEndRadius: 10,
+    },
+  
     FlatList: {
       backgroundColor: "red",
       border: "white"

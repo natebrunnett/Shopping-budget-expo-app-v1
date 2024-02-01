@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, Pressable, StyleSheet, View, Text, Button,
-TextInput, Alert, TouchableOpacity,TouchableHighlight } from 'react-native'
+TextInput, Alert, TouchableOpacity,TouchableHighlight, ScrollView } from 'react-native'
 import { useEffect, useState } from 'react';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Picker } from '@react-native-picker/picker';
@@ -15,7 +15,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
 
   const [goalInput, setGoalInput] = useState('');
   const [priceInput, setPriceInput] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('Other');
 
   useEffect(() => {
     console.log("Home useEffect")
@@ -83,7 +83,6 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
 
   const renderHiddenItem = (data, rowMap) => (
       <View style={styles.rowBack}>
-          <Text>Left</Text>
           <TouchableOpacity
               style={[styles.backRightBtn, styles.backRightBtnLeft]}
               onPress={() => closeRow(rowMap, data.item.key, data)}
@@ -108,13 +107,9 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
       >
         <View style={styles.row}>
         
-          <Text style={{color: "orange"}}>{data.item.body} </Text>
-        
-          <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
-            {/* <Text style={{color: 'white'}}>{data.item.key}</Text> */}
-            <Text style={{color: "orange", fontWeight: "bold"}}>{data.item.price} € </Text>
-            <Text style={{color: "orange", fontStyle: "italic"}}>{data.item.category}</Text>
-          </View>
+          <Text style={styles.itemBody}>{data.item.body} </Text>
+          <Text style={{color: "orange", fontWeight: "bold", width: "20%"}}>{data.item.price} € </Text>
+          <Text style={{color: "orange", fontStyle: "italic", width: "30%"}}>{data.item.category}</Text>
         
         </View>
       </TouchableHighlight>
@@ -142,54 +137,57 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.transparentView}>
+          <ScrollView>
+            <View style={styles.modalView}>
+              
+              <View style={styles.exitButtonRow}>
+                <Pressable 
+                  style={styles.exitButton}
+                  onPress={() => {setModalVisible(!modalVisible)}}
+                  ><Text style={styles.exitStyle}>X</Text></Pressable>
+              </View>
+
+              <Text style={styles.modalTextStyle}>Goal</Text>
+              
+
+              <TextInput 
+              value={goalInput}
+              onChangeText={(text) => setGoalInput(text)} 
+              style={styles.input}/>
+              
+              <View style={styles.pickerRow}>
+                <View style={styles.priceContainer}>
+                  <Text style={[styles.modalTextStyle,{marginLeft: 0, paddingLeft: 0, paddingRight: 4}]}>Price</Text>
+                  <TextInput 
+                  style={styles.priceInput}
+                  value={priceInput}
+                  onChangeText={(text) => setPriceInput(text)} 
+                  />
+                </View>
+
+      
+              
+                <View style={styles.picker}>
+                    <Text style={[styles.modalTextStyle, {marginBottom: 6}]}>Category </Text>
+                    <View style={styles.pickerContainer}>
+                      <Picker
+                        itemStyle={styles.itemStyle}
+                        selectedValue={selectedCategory}
+                        onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
+                        {categories && renderPickerItems()}
+                      </Picker>
+                    </View>
+                </View>
+                
+              </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose, {marginTop: 8, marginBottom: 0}]}
+                onPress={() => {setModalVisible(!modalVisible), createGoal()}}>
+                <Text style={styles.textStyle}>Let's do it!</Text>
+              </Pressable>
           
-          <View style={styles.modalView}>
-            
-            <View style={styles.exitButtonRow}>
-              <Pressable 
-                style={styles.exitButton}
-                onPress={() => {setModalVisible(!modalVisible)}}
-                ><Text>x</Text></Pressable>
             </View>
-
-            <Text style={styles.textStyle}>Goal</Text>
-            
-
-            <TextInput 
-            value={goalInput}
-            onChangeText={(text) => setGoalInput(text)} 
-            style={styles.input}/>
-            
-            <View style={styles.pickerRow}>
-              <View style={styles.priceContainer}>
-                <Text style={styles.textStyle}>Price</Text>
-                <TextInput 
-                style={styles.priceInput}
-                value={priceInput}
-                onChangeText={(text) => setPriceInput(text)} 
-                />
-              </View>
-
-    
-            
-              <View style={styles.picker}>
-                  <Text style={styles.textStyle}>Category </Text>
-                  <Picker
-                    itemStyle={styles.itemStyle}
-                    selectedValue={selectedCategory}
-                    onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
-                    {categories && renderPickerItems()}
-                  </Picker>
-              </View>
-            </View>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => {setModalVisible(!modalVisible), createGoal()}}>
-              <Text style={styles.textStyle}>Let's do it!</Text>
-             </Pressable>
-         
-           </View>
-        
+           </ScrollView>
         </View>
       </Modal>
 
@@ -239,10 +237,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     width: "100%",
     paddingLeft: 15,
-    paddingRight: 15,
+    paddingRight: 0,
+  },
+
+  itemBody: {
+    fontSize: 14,
+    color: 'orange',
+    width: "50%"
   },
 
 
@@ -255,17 +259,18 @@ const styles = StyleSheet.create({
   },
   transparentView: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
   },
 
   modalView: {
-    marginTop: 70,
-    backgroundColor: 'black',
+    marginTop: 71,
+    backgroundColor: '#555555',
     borderRadius: 20,
     padding: 25,
     paddingTop: 0,
+    paddingRight: 0,
+    paddingLeft: 0,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -288,16 +293,20 @@ const styles = StyleSheet.create({
   priceInput:{
     height: 50, 
     borderColor: 'orange', 
-    width:100,
+    width:90,
     borderWidth: 1,
     justifyContent: 'center',
     margin: "5%",
     color: 'white',
+    marginLeft: 0,
   },
   priceContainer: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 0,
+    paddingLeft: 3,
+    marginRight: 9
   },
   textStyle: {
     color: 'white',
@@ -305,6 +314,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  modalTextStyle: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 20
+  },  
+  exitStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   button: {
     borderRadius: 20,
     padding: 10,
@@ -335,10 +354,11 @@ const styles = StyleSheet.create({
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    padding: 0,
   },
   exitButton: {
-    padding: 5,
+    padding: 10,
     backgroundColor: "orange",
     borderTopEndRadius: 10,
   },
@@ -358,7 +378,7 @@ const styles = StyleSheet.create({
       borderBottomColor: 'black',
       borderBottomWidth: 1,
       justifyContent: 'center',
-      height: 50,
+      height: 70,
   },
   rowBack: {
       alignItems: 'center',
@@ -367,6 +387,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingLeft: 15,
+      height: 70,
   },
   backRightBtn: {
       alignItems: 'center',
@@ -399,25 +420,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: 'orange',
-    borderWidth: 1,
     display: 'flex',
     flexDirection: 'column'
   },
 
+  pickerContainer: {
+    borderColor: 'orange',
+    borderWidth: 1,
+  },
+
   itemStyle: {
     color:'white',
-    width:130, 
+    width:200, 
     height:250,
     fontSize: 14,
-    marginTop: "0%"
+    marginTop: "0%",
   },
 
   pickerRow: {
     display: 'flex',
     flexDirection: 'row',
   },
-
   //picker end
 
   //pressable start
