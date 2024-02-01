@@ -23,6 +23,8 @@ const Budget = ({categories, setCategories}) => {
   const [updateMode, setUpdateMode] = useState(false);
   const [currentKey, setKey] = useState(null);
 
+  const [showModalError, setError] = useState(undefined);
+
     useEffect(() => {
         console.log("Budget.js useEffect")
         _storeData()
@@ -48,22 +50,18 @@ const Budget = ({categories, setCategories}) => {
 
     }
     
-    const updateCategory = (key) => {
-      //findindex
-      //splice at index and replace with current Category
-      const idx = categories.findIndex((element) => element.key === key) 
-      console.log("idx= "+idx)
-      console.log("categoties[" + idx + "] = " + categories[idx]);
-      const  = {
-        key: uuid.v4(), 
+    const updateCategory = (thisKey) => {
+      const idx = categories.findIndex((element) => element.key === thisKey) 
+
+      const newCategory = {
+        key: thisKey, 
         category: catInput,
         weeklyBudget: weeklyInput,
         monthlyBudget: monthlyInput,
-        list: [],
+        list: categories[idx].list,
       }
       
-      //categories.splice(idx, 1, newCategory);
-      //set all inputs to zero
+      categories.splice(idx, 1, newCategory);
       setCatInput('');
       setWeeklyInput('');
       setMonthlyInput('');
@@ -108,28 +106,10 @@ const Budget = ({categories, setCategories}) => {
     }
 
     const closeRow = (rowMap, rowKey, data) => {
-      // if (rowMap[rowKey]) {
-      //     rowMap[rowKey].closeRow();
-      // }
-      // const newData = [...categories];
-      // const prevIndex = newData.findIndex(item => item.category === data.item.category);
-      // const dateData = new Date(); console.log("new Date= " + dateData)
-      // const localeDate = dateData.toLocaleDateString(); console.log("localeDate = " + localeDate)
-  
-      // data.item.date = localeDate;
-      // // console.log("data = "+ data)
-      // // console.log("prevIndex= " + prevIndex);
-      // // console.log("newData[prevIndex].list = " + newData[prevIndex].list)
-      // newData[prevIndex].list.push(data.item)
-      // // console.log("newData.list");
-      // console.log(newData[prevIndex].list);
-      // setCategories(newData);
-      // deleteRow(rowMap, rowKey);
       console.log("row closed")
     };
   
     const deleteRow = (rowMap, rowKey) => {
-        //closeRow(rowMap, rowKey);
         // const newData = [...goals];
         // const prevIndex = goals.findIndex(item => item.key === rowKey);
         // newData.splice(prevIndex, 1);
@@ -144,11 +124,11 @@ const Budget = ({categories, setCategories}) => {
               onPress={() => {
                 closeRow(rowMap, data.item.key, data), 
                 setUpdateMode(true), 
-                setKey(data.item.key),
+                setKey(data.item.key.toString()),
                 setModalVisible(true),
-                setCatInput({data.item.category}),
-                setWeeklyInput({data.item.weeklyBudget}),
-                setMonthlyInput({data.item.monthlyBudget})}}
+                setCatInput(data.item.category),
+                setWeeklyInput(data.item.weeklyBudget.toString()),
+                setMonthlyInput(data.item.monthlyBudget.toString())}}
           >
               <Text style={styles.backTextWhite}>Edit</Text>
           </TouchableOpacity>

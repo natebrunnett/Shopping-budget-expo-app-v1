@@ -152,35 +152,36 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
                 ><Text>x</Text></Pressable>
             </View>
 
-            <Text style={styles.modalText}>Goal</Text>
+            <Text style={styles.textStyle}>Goal</Text>
             
 
             <TextInput 
             value={goalInput}
             onChangeText={(text) => setGoalInput(text)} 
-            style={styles.goalInput}/>
+            style={styles.input}/>
             
-            <View style={{display: 'flex', flexDirection: 'row', alignItems: "center", gap: 5}}>
-              
-              <Text style={{fontWeight: 'bold', fontSize: 14, paddingBottom: 10}}>Price</Text>
-              <TextInput 
-              style={styles.priceInput}
-              value={priceInput}
-              onChangeText={(text) => setPriceInput(text)} 
-              />
-
-            </View>
-            
-            <View style={styles.picker}>
-                <Text style={{fontSize: 14, fontWeight:'bold'}}>Category </Text>
-                <Picker
-                  itemStyle={styles.itemStyle}
-                  selectedValue={selectedCategory}
-                  onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
-                  {categories && renderPickerItems()}
-                </Picker>
+            <View style={styles.pickerRow}>
+              <View style={styles.priceContainer}>
+                <Text style={styles.textStyle}>Price</Text>
+                <TextInput 
+                style={styles.priceInput}
+                value={priceInput}
+                onChangeText={(text) => setPriceInput(text)} 
+                />
               </View>
 
+    
+            
+              <View style={styles.picker}>
+                  <Text style={styles.textStyle}>Category </Text>
+                  <Picker
+                    itemStyle={styles.itemStyle}
+                    selectedValue={selectedCategory}
+                    onValueChange={ (itemValue, itemIndex) => setSelectedCategory(itemValue) }>
+                    {categories && renderPickerItems()}
+                  </Picker>
+              </View>
+            </View>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => {setModalVisible(!modalVisible), createGoal()}}>
@@ -203,8 +204,7 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
                 previewOpenDelay={3000}
                 onRowDidOpen={onRowDidOpen}
             />
-      /*
-      <View style={{
+      {/* <View style={{
         display: "flex",
         alignItems: "center",
         paddingTop: 8,
@@ -216,8 +216,8 @@ const Home= ({goals, setGoals, categories, setCategories }) => {
           onPress={() => setModalVisible(true)}>
           <Text style={styles.textStyle}>Create</Text>
         </Pressable>
-      </View>
-      */
+      </View> */}
+      
 
        <View style={styles.Pressable}>
           <Pressable
@@ -261,14 +261,11 @@ const styles = StyleSheet.create({
   },
 
   modalView: {
-    margin: 0,
-    backgroundColor: 'white',
+    marginTop: 70,
+    backgroundColor: 'black',
     borderRadius: 20,
-    padding: 0,
-    width: "80%",
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    padding: 25,
+    paddingTop: 0,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -279,6 +276,35 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  input: {
+    height: 50, 
+    borderColor: 'orange', 
+    width:300,
+    borderWidth: 1,
+    justifyContent: 'center',
+    margin: "5%",
+    color: 'white',
+  },
+  priceInput:{
+    height: 50, 
+    borderColor: 'orange', 
+    width:100,
+    borderWidth: 1,
+    justifyContent: 'center',
+    margin: "5%",
+    color: 'white',
+  },
+  priceContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
   button: {
     borderRadius: 20,
     padding: 10,
@@ -317,25 +343,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 10,
   },
 
-  goalInput: {
-    width: "85%",
-    height: 35,
-    margin: 0,
-    marginBottom: 10,
-    padding: 0,
-    borderWidth: 1,
-    borderRadius: 8,
-  },
 
-  priceInput: {
-    width: "20%",
-    height: 35,
-    margin: 0,
-    marginBottom: 10,
-    padding: 0,
-    borderWidth: 1,
-    borderRadius: 8,
-  },
 
   //modal end
 
@@ -386,18 +394,28 @@ const styles = StyleSheet.create({
     marginTop: "0%",
     paddingBottom: 0,
     marginBottom: "3%",
-    marginLeft: "4%",
+    marginLeft: "0%",
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: 'orange',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column'
   },
 
   itemStyle: {
-    color:'black',
+    color:'white',
     width:130, 
-    height:40,
+    height:250,
     fontSize: 14,
+    marginTop: "0%"
+  },
+
+  pickerRow: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 
   //picker end
