@@ -97,10 +97,28 @@ const Budget = ({categories, setCategories}) => {
     // }
 
     const renderTotal = (list) => {
-      let total = 0;
+      let total = 0
       const numberArray = list.map((x) => x.price);
       for (let i = 0; i < numberArray.length; i++){
-        total += parseInt(numberArray[i])
+        //console.log(numberArray[i] + " is a number= " + Number.isInteger(Number(numberArray[i])))
+        if(Number.isInteger(Number(numberArray[i]))){
+          //handle full number
+          let newTotal = (parseInt(numberArray[i]) * 100) + (total * 100);
+          total = (newTotal * .01).toFixed(2);
+          console.log("newTotal = " + newTotal + "total = " + total)
+        }else{
+          try { //handle float
+            //console.log("float")
+            const fullNumber = Number(numberArray[i]) * 100;
+            //console.log(fullNumber)
+            let fullTotal = (total * 100) + parseInt(fullNumber);
+           // console.log("fullTotal = "+ fullTotal)
+            total = (fullTotal * .01).toFixed(2);
+           // console.log("storing total = "+ total);
+          } catch (error) {
+            console.log(error)
+          }
+        }
       }
       return total
     }
@@ -174,7 +192,7 @@ const Budget = ({categories, setCategories}) => {
           </View>
 
           <View style={styles.historyTitle}>
-            <Text style={{color:"orange"}}>History</Text>
+            <Text style={{color:"orange", marginBottom: 10,}}>History</Text>
           </View>
 
           {data.item.list && data.item.list.map((listData, idx) => {
@@ -367,6 +385,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       marginBottom: 5,
+      marginRight: 15,
+      marginLeft: 15,
     },
 
     totalHeader: {
@@ -509,7 +529,7 @@ const styles = StyleSheet.create({
     // SwipeListView start
 
   backTextWhite: {
-    color: '#FFF',
+    color: 'black',
   },
   rowFront: {
       alignItems: 'center',
@@ -536,7 +556,7 @@ const styles = StyleSheet.create({
       width: 75,
   },
   backRightBtnLeft: {
-      backgroundColor: 'blue',
+      backgroundColor: 'orange',
       right: 75,
   },
   backRightBtnRight: {

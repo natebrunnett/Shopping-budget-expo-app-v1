@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   // SwipeListView start
 
   backTextWhite: {
-      color: '#FFF',
+      color: 'black',
   },
   rowFront: {
       alignItems: 'center',
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
       width: 75,
   },
   backRightBtnLeft: {
-      backgroundColor: 'blue',
+      backgroundColor: 'orange',
       right: 75,
   },
   backRightBtnRight: {
